@@ -7,12 +7,15 @@ from emu.utils.binary import read_image
 
 
 def compile_code_from_str(asm_code):
-    with NamedTemporaryFile('w+') as source:
+    source_file_name = '.arm/temp.asm'
+    with open('.arm/temp.asm', 'w+') as source:
         source.write(asm_code)
         source.seek(0)
-        compile_code_from_file(source.name)
-        image = read_image(source.name + '.bin')
-        remove(source.name + '.bin')
+    compile_code_from_file(source_file_name)
+    binary_file_name = splitext(source_file_name)[0] + '.bin'
+    image = read_image(binary_file_name)
+    remove(binary_file_name)
+    remove(source_file_name)
     return image
 
 def compile_code_from_file(source_file_name):

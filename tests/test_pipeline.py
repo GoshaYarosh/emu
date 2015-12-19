@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from emu.computer.processor import Processor
+from emu.cpu.processor import Processor
 from emu.utils.compile import compile_code_from_str
 from emu.utils.binary import read_instructions
 
@@ -13,12 +13,13 @@ class ProcessorPipelineTestCase(TestCase):
         self.processor = Processor(self.registers_count, self.memory_size)
 
         self.code = """
-            mov r2, #11
-            mov r3, #10
-            add r1, r2, r3
-            cmp r1, #15
-            add r2, r1, r3, lsl r4
-            sub r1, r2, r3
+                mov r1, #2
+                mov r2, #3
+                add r3, r1, r2
+                mov r3, r3, lsl 1
+                b pipa
+                mov r3, #123
+            pipa:
         """
         self.instructions_count = len(self.code.strip().split('\n'))
 
@@ -30,9 +31,13 @@ class ProcessorPipelineTestCase(TestCase):
         pipeline = self.processor.pipeline
         steps = pipeline.launch()
         self.processor.load_image(self.image)
-        self.assertItemsEqual(steps, (step for step in pipeline.itersteps()))
 
         instructions = read_instructions(self.image)
         for index, step in enumerate(steps):
             self.assertIn('instruction_code', step)
             self.assertEqual(step['instruction_code'], instructions[index])
+
+    def test_run_simple_code(self):
+        pipeline = self.processor.pipeline
+        steps = pipeline.launch()
+        self.assertEqual(self.processor.registers['r3'], 10)

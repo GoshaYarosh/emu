@@ -31,7 +31,6 @@ class CompileCodeTestCase(TestCase):
         self.assertRaises(IOError, compile_code_from_file, 'some_file')
 
     def test_compile_code_from_str(self):
-        with NamedTemporaryFile(mode='w+') as source:
-            image = compile_code_from_str(self.code)
-            instructions = read_instructions(image)
-            self.assertEqual(len(instructions), self.instructions_count)
+        image = compile_code_from_str(self.code)
+        instructions = read_instructions(image)
+        self.assertEqual(len(instructions), self.instructions_count)

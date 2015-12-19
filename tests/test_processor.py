@@ -1,7 +1,7 @@
 from unittest import TestCase
 from random import randint
 
-from emu.computer.processor import Processor
+from emu.cpu.processor import Processor
 from emu.utils.compile import compile_code_from_str
 
 
@@ -55,7 +55,7 @@ class ProcessorTestCase(TestCase):
 
         for address in xrange(100):
             count = randint(0, self.memory_size / 2)
-            start = randint(0, self.memory_size - count - 1)
+            start = randint(0, self.memory_size - count - 10)
             bytes_from_memory = memory.read_bytes(start, count)
             bytes_from_list = memory_copy[start:start + count]
             self.assertItemsEqual(bytes_from_memory, bytes_from_list)
