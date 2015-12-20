@@ -71,6 +71,9 @@ class InstructionHandler(object):
     def get_code(self):
         return self._instruction.code
 
+    def get_dst_reg_name(self):
+        return 'r{}'.format(self._dst_reg_number)
+
     def set_operands(self, is_state_changing, source_value, condition_handler,
                      shifter_value, dst_reg_number):
         self._source_value = source_value

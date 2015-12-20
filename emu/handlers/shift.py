@@ -50,10 +50,10 @@ class ShiftHandler(object):
     def __init__(self, shift):
         self._shift = shift
 
-    def get_shift_name(self):
+    def get_name(self):
         return self._shift.name
 
-    def get_shift_code(self):
+    def get_code(self):
         return self._shift.code
 
     def set_operands(self, value, shift_amount):

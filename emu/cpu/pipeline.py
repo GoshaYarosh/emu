@@ -31,7 +31,7 @@ class Pipeline(object):
                 self.processor.registers['pc'] += 4
                 yield {
                     'instruction_code': instructon_code,
-                    'instruction_handler': instruction_handler
+                    'instruction_handler': instruction_handler,
                 }
         except IndexError as e:
             print e

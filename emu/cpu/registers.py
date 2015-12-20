@@ -27,6 +27,9 @@ class RegistersManager(object):
     def count(self):
         return len(self._registers)
 
+    def __iter__(self):
+        return self._registers.iteritems()
+
     def __getitem__(self, register_name):
         return self._registers[register_name].get_value()
 

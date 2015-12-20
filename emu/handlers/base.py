@@ -15,20 +15,27 @@ class Handler(object):
 
 class BranchHandler(object):
 
-    def __init__(self, processor, offset):
+    def __init__(self, processor, offset, condition):
         self._processor = processor
         self._offset = offset
+        self._condition = condition
 
     def get_name(self):
         return 'b'
 
     def get_code(self):
-        return 0
+        return 0    
 
-    def handle(self):
+    def get_dst_reg_name(self):
+        return 'pc'
+
+    def get_address(self):
         offset = self._offset
         offset = asr(self._offset << 8, 8) << 2
         offset &= (2 ** 32 - 1)
         offset = offset - 2 ** 32 if offset >> 31 else offset
-        print self._processor.registers['pc'], offset + 4
-        self._processor.registers['pc'] += offset + 4
+        return self._processor.registers['pc'] + offset + 4
+
+    def handle(self):
+        if self._condition.handle():
+            self._processor.registers['pc'] = self.get_address()
