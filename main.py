@@ -99,6 +99,7 @@ class Emu(object):
         for step in self.processor.pipeline.itersteps():
             self.wait_for_press(lambda: self.make_step(step))
 
+        print "ok!\n"
         self.print_registers()
         self.print_flags()
 
