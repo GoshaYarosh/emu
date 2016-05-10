@@ -28,11 +28,12 @@ class Pipeline(object):
                 instructon_code = self.retrieve_instruction()
                 instruction_handler = self.decode_instruction(instructon_code)
                 self.handle_instruction(instruction_handler)
-                self.processor.registers['pc'] += 4
                 yield {
-                    'instruction_code': instructon_code,
                     'instruction_handler': instruction_handler,
+                    'instruction_code': instructon_code,
                 }
+                self.processor.registers['pc'] += 4
+
         except IndexError as e:
             print e
         except ValueError as e:

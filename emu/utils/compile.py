@@ -18,6 +18,7 @@ def compile_code_from_str(asm_code):
     remove(source_file_name)
     return image
 
+
 def compile_code_from_file(source_file_name):
     with NamedTemporaryFile('w+') as out:
         fasm_path = dirname(abspath(__file__)) + '/fasmarm'

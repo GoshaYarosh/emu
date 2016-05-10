@@ -1,9 +1,11 @@
+from emu.handlers.shift import asr
 from emu.utils.binary import pretty
 from emu.decoders.base import Decoder, ImmediateDecoder
 from emu.decoders.shift import ShiftDecoder
 from emu.handlers.base import BranchHandler
 from emu.handlers.instruction import InstructionHandler
 from emu.handlers.condition import ConditionHandler
+
 
 class InstructionDecoder(Decoder):
 
@@ -46,10 +48,15 @@ class InstructionDecoder(Decoder):
         handler = self.decode(code)
         name = handler.get_name()
         if name == 'b':
-            return "{}{} <0x{:08x}>".format(
+            offset = Decoder.get_field(code, offset=0, length=24)
+            offset = asr(offset << 8, 8) << 2
+            offset &= (2 ** 32 - 1)
+            offset = offset - 2 ** 32 if offset >> 31 else offset
+            return "{}{} {:x}".format(
                 name, self.get_condition_handler(code).get_name(),
-                self._processor.registers['pc'],
+                offset + 8,
             )
+
         if name == 'mov':
             return "{}{} {}, {}".format(
                 name, self.get_condition_handler(code).get_name(),
@@ -62,11 +69,11 @@ class InstructionDecoder(Decoder):
                 name, self.get_condition_handler(code).get_name(),
                 self.get_source_operand_name(code),
                 self.str_shifter_operand
-            ) 
+            )
 
         else:
             return "{}{} {}, {}, {}".format(
-                handler.get_name(), self.get_condition_handler(code).get_name(),    
+                handler.get_name(), self.get_condition_handler(code).get_name(),
                 'r{}'.format(self.get_destination_register_number(code)),
                 self.get_source_operand_name(code),
                 self.str_shifter_operand

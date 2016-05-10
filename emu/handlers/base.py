@@ -8,7 +8,6 @@ class Handler(object):
         self._name = name
         self._function = function
 
-
     def handle(self):
         pass
 
@@ -24,7 +23,7 @@ class BranchHandler(object):
         return 'b'
 
     def get_code(self):
-        return 0    
+        return 0
 
     def get_dst_reg_name(self):
         return 'pc'

@@ -1,3 +1,6 @@
+from collections import OrderedDict
+
+
 class Register(object):
 
     def __init__(self, initial_value=0):
@@ -15,14 +18,14 @@ class Register(object):
 class RegistersManager(object):
 
     def __init__(self, registers_count, initial_value=0):
-        self._registers = {
-            'r{}'.format(index): Register(initial_value)
+        self._registers = OrderedDict((
+            ('sp',  Register(initial_value)),
+            ('pc', Register(initial_value))
+        ))
+        self._registers.update(
+            ('r{}'.format(index), Register(initial_value))
             for index in xrange(registers_count)
-        }
-        self._registers.update({
-            'sp': Register(initial_value),
-            'pc': Register(initial_value),
-        })
+        )
 
     def count(self):
         return len(self._registers)
